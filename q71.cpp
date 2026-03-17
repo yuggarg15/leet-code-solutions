@@ -1,48 +1,35 @@
 class Solution {
 public:
     string simplifyPath(string path) {
-        vector<char> str ; 
+        vector<string> v ;
         int n = path.size();
-        for(int i = 0 ; i < path.size(); i++){
-            if(path[i]=='/'){
-                while(path[i]=='/'){
-                    i++;
-                }
-                i--;
-                str.push_back('/');
-            } else if(path[i]=='.'){
-                if((i<n-1) && (path[i+1]=='.')){
-                    if((i<n-2)&&(path[i+2]=='.')){
-                        while(i<n && path[i]=='.'){
-                            str.push_back('.');
-                            i++;
-                        }
-                        i--;
-                        continue;
-                    }else{
-                        if(!str.empty()){
-                            if(str[str.size()-1]=='/'){
-                                str.pop_back();
-                            while((!str.empty()) && (str[str.size()-1]!= '/')){
-                                str.pop_back();
-                            }
-                            }
-                        }
-                        i++;
-                        continue;
-                    }
-                }else{
-                    if(!str.empty() && str[str.size()-1]=='/') str.pop_back();
-                    continue;
-                }
-            } else {
+        for(int i = 0 ; i < n; i++){
+            if(path[i]=='/') continue;
+            string str ; 
+            while( i < n && path[i]!='/'){
                 str.push_back(path[i]);
+                i++;
+            }
+            v.push_back(str);
+        }
+        vector<string> st;
+        for(int i = 0 ; i < v.size(); i++){
+            if(v[i]=="."){
+                continue;
+            }else if (v[i]==".."){
+                if(st.size()) st.pop_back();
+            } else{
+                st.push_back(v[i]);
             }
         }
-        if(str.size()>1 && str[str.size()-1]=='/'){
-            str.pop_back();
+        string ans ;
+        for(int i = 0 ; i < st.size(); i++){
+            ans.push_back('/');
+            ans += st[i];
         }
-        string s(str.begin(), str.end());
-        return s; 
+        if(ans.empty() && (!path.empty())){
+            ans.push_back('/');
+        }
+        return ans ;
     }
 };
